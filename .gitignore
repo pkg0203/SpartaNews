@@ -380,3 +380,6 @@ $RECYCLE.BIN/
 
 # Media files
 media/
+
+# settings
+config.py
