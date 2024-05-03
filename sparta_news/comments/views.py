@@ -7,6 +7,6 @@ from .serializers import *
 # Create your views here.
 class CommentView(APIView):
     def get(self,request,article_id):
-        comment=Comment.objects.all()
+        comment=Comment.objects.filter(article=article_id)
         serializer = CommentSerializer(comment,many=True)
         return Response(serializer.data)
