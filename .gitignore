@@ -384,3 +384,4 @@ media/
 
 # settings
 config.py
+.venv
