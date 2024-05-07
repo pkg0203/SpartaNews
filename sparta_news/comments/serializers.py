@@ -13,3 +13,11 @@ class CommentWriteSerializer(serializers.Serializer):
             "content",
         ]
         read_only='author'
+
+class CoCommentWriteSerializer(serializers.Serializer):
+    class Meta:
+        model = Co_Comment
+        fields = [
+            "content",
+        ]
+        read_only='author'

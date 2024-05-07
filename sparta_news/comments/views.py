@@ -7,6 +7,7 @@ from .serializers import *
 
 
 class CommentView(APIView):
+    #대댓글까지 get하는 것은 아직 구현하지 않음
     def get(self, request, article_id):
         comment = Comment.objects.filter(article=article_id)
         serializer = CommentViewSerializer(comment, many=True)
@@ -30,3 +31,15 @@ class CommentView(APIView):
         comment = get_object_or_404(Comment, pk=comment_id)
         comment.delete()
         return Response({f'pk : {comment_id} had successfully been deleted.'})
+
+class CoCommentView(APIView):
+    def post(self,request,comment_id):
+        serializer = CoCommentWriteSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(author=request.user,
+                            comment_at=comment_id)
+            return Response(serializer.data, status=HTTP_201_CREATED)
+    def put(self,request,comment_id):
+        pass
+    def delete(self,request,comment_id):
+        pass
