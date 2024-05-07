@@ -13,7 +13,7 @@ class CommentView(APIView):
         return Response(serializer.data)
 
     def post(self, request, article_id):
-        serializer = CommentCreateSerializer(request.data)
+        serializer = CommentCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user,
                             article=get_object_or_404(Article, article_id))
