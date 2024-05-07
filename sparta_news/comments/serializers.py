@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from .models import *
 
-class CommentSerializer(serializers.Serializer):
+class CommentViewSerializer(serializers.Serializer):
     class Meta:
         model = Comment
         fields = "__all__"
 
-class CommentCreateSerializer(serializers.Serializer):
+class CommentWriteSerializer(serializers.Serializer):
     class Meta:
         model = Comment
         fields = [
