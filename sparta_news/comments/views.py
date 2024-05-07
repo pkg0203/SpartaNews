@@ -20,6 +20,15 @@ class CommentView(APIView):
                             article=get_object_or_404(Article, article_id))
             return Response(serializer.data, status=HTTP_201_CREATED)
 
+
+class CommentDetailView(APIView):
+    def post(self, request, comment_id):
+        serializer = CoCommentWriteSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(author=request.user,
+                            comment_at=comment_id)
+            return Response(serializer.data, status=HTTP_201_CREATED)
+
     def put(self, request, comment_id):
         comment = get_object_or_404(Comment, pk=comment_id)
         serializer = CommentWriteSerializer(
@@ -35,13 +44,6 @@ class CommentView(APIView):
 
 
 class CoCommentView(APIView):
-    def post(self, request, comment_id):
-        serializer = CoCommentWriteSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(author=request.user,
-                            comment_at=comment_id)
-            return Response(serializer.data, status=HTTP_201_CREATED)
-
     def put(self, request, co_comment_id):
         co_comment = get_object_or_404(Co_Comment, pk=co_comment_id)
         serializer = CoCommentWriteSerializer(
