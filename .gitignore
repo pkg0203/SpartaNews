@@ -1,7 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode,pycharm,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudiocode,pycharm,macos,windows
 
-config.py
 
 ### macOS ###
 # General
@@ -382,4 +381,6 @@ $RECYCLE.BIN/
 
 # Media files
 media/
-sparta_news/sparta_news/config.py
+
+# settings
+config.py
