@@ -39,7 +39,9 @@ class CoCommentView(APIView):
             serializer.save(author=request.user,
                             comment_at=comment_id)
             return Response(serializer.data, status=HTTP_201_CREATED)
-    def put(self,request,comment_id):
+    def put(self,request,co_comment_id):
         pass
-    def delete(self,request,comment_id):
-        pass
+    def delete(self,request,co_comment_id):
+        co_comment = get_object_or_404(Co_Comment, pk=co_comment_id)
+        co_comment.delete()
+        return Response({f'pk : {co_comment_id} had successfully been deleted.'})
