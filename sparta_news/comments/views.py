@@ -10,8 +10,8 @@ from .serializers import *
 class CommentView(APIView):
     # 대댓글까지 get하는 것은 아직 구현하지 않음
     def get(self, request, article_id):
-        comment = Comment.objects.filter(article=article_id)
-        serializer = CommentViewSerializer(comment, many=True)
+        comments = Comment.objects.filter(article_id=article_id)
+        serializer = CommentViewSerializer(comments, many=True)
         return Response(serializer.data)
 
     def post(self, request, article_id):
