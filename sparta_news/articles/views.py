@@ -10,6 +10,18 @@ from .serializers import ArticleSerializer
 class ArticleListAPIView(APIView):
     def get(self, request):
         articles = Article.objects.all()
+
+        categorie = request.GET.get('categorie')
+        if categorie == 'title' :
+            search = request.GET.get("search")
+            articles = articles.filter(title__contains=search)
+        elif categorie == 'content' :
+            search = request.GET.get("search")
+            articles = articles.filter(content__contains=search)
+        elif categorie == 'nickname' :
+            search = request.GET.get("search")
+            articles = articles.filter(author__contains=search)
+
         paginator = Paginator(articles, 30) 
         page_number = request.GET.get("page")
         if page_number == None:
