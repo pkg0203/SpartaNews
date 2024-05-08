@@ -8,28 +8,35 @@ from .serializers import *
 
 
 class CommentView(APIView):
-    # 대댓글까지 get하는 것은 아직 구현하지 않음
+    permission_classes = [IsAuthenticated]
     def get(self, request, article_id):
-        comment = Comment.objects.filter(article=article_id)
-        serializer = CommentViewSerializer(comment, many=True)
+        comments = Comment.objects.filter(article_id=article_id)
+        serializer = CommentViewSerializer(comments, many=True)
         return Response(serializer.data)
 
     def post(self, request, article_id):
         serializer = CommentWriteSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(author=request.user,
-                            article=get_object_or_404(Article, article_id))
+            serializer.save(author=request.user, article=get_object_or_404(Article, pk=article_id))
             return Response(serializer.data, status=HTTP_201_CREATED)
+        
+    #로그인한 사람만 post
+    def dispatch(self, request, article_id):
+        if request.method == 'POST':
+            self.permission_classes = [IsAuthenticated]
+        else:
+            self.permission_classes = []
+        return super().dispatch(request, article_id)
 
 
 class CommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, comment_id):
-        serializer = CoCommentWriteSerializer(data=request.data)
+        serializer = CoCommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user,
-                            comment_at=comment_id)
+                            comment_at=get_object_or_404(Comment, pk=comment_id))
             return Response(serializer.data, status=HTTP_201_CREATED)
 
     def put(self, request, comment_id):
@@ -58,7 +65,7 @@ class CoCommentView(APIView):
     def put(self, request, co_comment_id):
         co_comment = get_object_or_404(Co_Comment, pk=co_comment_id)
         if request.user == co_comment.author:
-            serializer = CoCommentWriteSerializer(
+            serializer = CoCommentSerializer(
                 co_comment, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()

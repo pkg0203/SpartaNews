@@ -11,6 +11,7 @@ class Comment(models.Model):
     )
     article = models.ForeignKey(
         Article,
+        related_name='comments',
         on_delete=models.CASCADE
     )
     content = models.TextField()
