@@ -1,5 +1,11 @@
 from rest_framework import serializers
 from .models import User
+from rest_framework.serializers import Serializer
+from drf_recaptcha.fields import ReCaptchaV3Field
+
+
+class V3Serializer(Serializer):
+    recaptcha = ReCaptchaV3Field(action="example")
 
 
 class UserSerializer(serializers.ModelSerializer):
