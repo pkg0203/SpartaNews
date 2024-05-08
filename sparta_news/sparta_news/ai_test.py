@@ -1,5 +1,5 @@
 from openai import OpenAI
-import config
+import sparta_news.sparta_news.config as config
 
 client = OpenAI(api_key=config.OPENAI_API_KEY)
 
