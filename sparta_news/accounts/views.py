@@ -17,26 +17,31 @@ from drf_recaptcha.fields import ReCaptchaV3Field
 class User(APIView):
     # create user
     def post(self, request):
-        recaptcha_token = request.POST.get('recaptcha_token')
+        # recaptcha_token = request.POST.get('recaptcha_token')
 
-        recaptcha_response = requests.post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            data={
-                'secret': settings.DRF_RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_token
-            }
-        )
+        # recaptcha_response = requests.post(
+        #     'https://www.google.com/recaptcha/api/siteverify',
+        #     data={
+        #         'secret': settings.DRF_RECAPTCHA_SECRET_KEY,
+        #         'response': recaptcha_token
+        #     }
+        # )
 
-        recaptcha_data = recaptcha_response.json()
-        if recaptcha_data['success']:
-            serializer = UserSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                return JsonResponse({'error': '인증이 실패하였습니다.'})
-        else:
-            return JsonResponse({'error': 'reCAPTCHA 검증에 실패했습니다.'})
+        # recaptcha_data = recaptcha_response.json()
+        # if recaptcha_data['success']:
+        #     serializer = UserSerializer(data=request.data)
+        #     if serializer.is_valid(raise_exception=True):
+        #         serializer.save()
+        #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #     else:
+        #         return JsonResponse({'error': '인증이 실패하였습니다.'})
+        # else:
+        #     return JsonResponse({'error': 'reCAPTCHA 검증에 실패했습니다.'})
+        
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UserDetail(APIView):

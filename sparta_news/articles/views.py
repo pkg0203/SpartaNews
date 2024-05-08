@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import ArticleSerializer
+from .serializers import ArticleSerializer, ArticleDetailSerializer
 
 class ArticleListAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -30,7 +30,7 @@ class ArticleListAPIView(APIView):
         #정렬
         order = request.GET.get("order")
         if order == 'comment' :
-            articles = articles.annotate(comment_count=Count('comments') + Count('comments__co_comment')).order_by('-comment_count')
+            articles = articles.annotate(comment_count=Count('comments')).order_by('-comment_count')
         elif order == 'like' :
             pass
         elif order == 'recent' :
@@ -68,7 +68,7 @@ class ArticleDetailAPIView(APIView):
 
     def get(self, request, pk):
         article = self.get_object(pk)
-        serializer = ArticleSerializer(article)
+        serializer = ArticleDetailSerializer(article)
         return Response(serializer.data)
 
     def put(self, request, pk):
