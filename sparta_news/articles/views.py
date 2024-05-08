@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
+from django.db.models import Count, F
 from .models import Article
 from django.core import serializers
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ class ArticleListAPIView(APIView):
     def get(self, request):
         articles = Article.objects.all()
 
+        #필터링
         categorie = request.GET.get('categorie')
         if categorie == 'title' :
             search = request.GET.get("search")
@@ -21,7 +23,17 @@ class ArticleListAPIView(APIView):
         elif categorie == 'nickname' :
             search = request.GET.get("search")
             articles = articles.filter(author__contains=search)
+        
+        #정렬
+        order = request.GET.get("order")
+        if order == 'comment' :
+            articles = articles.annotate(comment_count=Count('comments') + Count('comments__co_comment')).order_by('-comment_count')
+        elif order == 'like' :
+            pass
+        elif order == 'recent' :
+            articles = articles.order_by('-created_at')
 
+        #페이지네이션
         paginator = Paginator(articles, 30) 
         page_number = request.GET.get("page")
         if page_number == None:
