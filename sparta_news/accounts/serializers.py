@@ -7,6 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'nickname', 'password']
 
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    #비밀번호 유효성 검사
     def validate_password(self, value):
         if len(value) < 5:
             raise serializers.ValidationError()
@@ -15,6 +20,15 @@ class UserSerializer(serializers.ModelSerializer):
         if not any(char.isalpha() for char in value):
             raise serializers.ValidationError()
         return value
+    
+    #비밀번호 암호화
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
