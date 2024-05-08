@@ -5,10 +5,10 @@ from django.utils.timezone import make_aware, is_aware
 
 
 class RelativeDateField(serializers.Field):
-    def to_representation(self, created_at):
+    def to_representation(self, times):
         now = datetime.now().date()
-        created_at = created_at.date()
-        delta = now - created_at
+        times = times.date()
+        delta = now - times
         years = delta.days // 365
         days = delta.days
         minutes = delta.seconds // 60
