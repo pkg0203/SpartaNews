@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 from .models import Article
 from django.core import serializers
 from rest_framework.response import Response
@@ -9,7 +10,13 @@ from .serializers import ArticleSerializer
 class ArticleListAPIView(APIView):
     def get(self, request):
         articles = Article.objects.all()
-        serializer = ArticleSerializer(articles, many=True)
+        paginator = Paginator(articles, 30) 
+        page_number = request.GET.get("page")
+        if page_number == None:
+            serializer = ArticleSerializer(articles, many=True)
+        else :
+            page_obj = paginator.get_page(page_number)
+            serializer = ArticleSerializer(page_obj, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -39,3 +46,4 @@ class ArticleDetailAPIView(APIView):
         article.delete()
         data = {"pk": f"{pk} is deleted."}
         return Response(data, status=status.HTTP_200_OK)
+    
