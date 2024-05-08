@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import Article
+from .models import Article, ArticleLike
 from django.core import serializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -46,3 +46,29 @@ class ArticleDetailAPIView(APIView):
         article.delete()
         data = {"pk": f"{pk} is deleted."}
         return Response(data, status=status.HTTP_200_OK)
+    
+class ArticleLikeAPIView(APIView):
+    # def post(self, request, pk):
+    #     # request.user 로그인 된 사용자 / ArticleLike 중에 user가 request 유저, article id 가 pk인
+    #     if request.user.is_authenticated:
+    #         article = self.get_object(pk)
+    #         if article.like_users.filter(pk=request.user.pk).exists():
+    #             article.like_users.remove(request.user)
+    #         else:
+    #             article.like_users.add(request.user)
+    #     else:
+    #         return Response(status=status.HTTP_200_OK)
+
+    #     return Response({"error": "인증되지 않은 사용자입니다."}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    permission_classes = [IsAuthenticated]
+    def post(self, request, pk):
+        article = get_object_or_404(Article, id=pk)
+        article_like = ArticleLike.objects.filter(user=request.user,article=article)
+        if not article_like.exists():
+            like = ArticleLike(user=request.user, article=article)
+            like.save()
+            return Response("LIKE", status=201)
+        else :
+            article_like.first().delete()
+            return Response("UNLIKE", status=201)
