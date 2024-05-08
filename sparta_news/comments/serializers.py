@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import *
 from datetime import datetime, timedelta
-from django.utils.timezone import make_aware, is_aware
 
 
 class RelativeDateField(serializers.Field):
