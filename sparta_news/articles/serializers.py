@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Article, ArticleLike
 from markdownx.utils import markdown
 from datetime import datetime, timedelta, timezone
+from .ai_test import news_link_ai
 
 class ArticleSerializer(serializers.ModelSerializer):
     created_string = serializers.SerializerMethodField()
@@ -51,3 +52,9 @@ class ArticleDetailSerializer(ArticleSerializer) :
             'updated_at',
             'created_at',
         )
+        
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        news_link = news_link_ai(instance.url)
+        data['news_link'] = news_link
+        return data

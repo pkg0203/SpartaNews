@@ -28,6 +28,8 @@ SECRET_KEY = config.SECRET_KEY
 DRF_RECAPTCHA_SECRET_KEY = config.DRF_RECAPTCHA_SECRET_KEY
 #DRF_RECAPTCHA_PROXY - default
 
+#OpenAI KEY
+OPENAI_API_KEY = config.OPENAI_API_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
