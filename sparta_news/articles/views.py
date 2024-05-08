@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import ArticleSerializer
-    
+
 class ArticleListAPIView(APIView):
     def get(self, request):
         articles = Article.objects.all()
@@ -17,7 +17,7 @@ class ArticleListAPIView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
 class ArticleDetailAPIView(APIView):
     def get_object(self, pk):
         return get_object_or_404(Article, pk=pk)
