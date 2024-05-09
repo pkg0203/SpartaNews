@@ -21,11 +21,13 @@ class RelativeDateField(serializers.Field):
 
 
 class CoCommentViewSerializer(serializers.ModelSerializer):
+    date = RelativeDateField(source='created_at')
     class Meta:
         model = Co_Comment
         fields = [
             "id",
             "content",
+            "date",
         ]
 
     def to_representation(self, instance):
