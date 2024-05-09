@@ -1,5 +1,11 @@
 from rest_framework import serializers
 from .models import User
+from rest_framework.serializers import Serializer
+from drf_recaptcha.fields import ReCaptchaV3Field
+
+
+class V3Serializer(Serializer):
+    recaptcha = ReCaptchaV3Field(action="example")
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,6 +42,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = ['password', 'nickname']
         read_only_fields = ['username']
+
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def update(self, instance, validated_data):
         if self.context['request'].user.id != instance.id:
