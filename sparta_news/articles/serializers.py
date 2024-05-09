@@ -26,8 +26,7 @@ class RelativeDateField(serializers.Field):
         
 class ArticleSerializer(serializers.ModelSerializer):
     date = RelativeDateField(source='created_at')
-    comment_count = serializers.IntegerField(read_only=True)
-    
+
     class Meta:
         model = Article
         exclude= (

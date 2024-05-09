@@ -14,7 +14,6 @@ class ArticleListAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         articles = Article.objects.all()
-
         #필터링
         categorie = request.GET.get('categorie')
         if categorie == 'title' :
@@ -26,14 +25,10 @@ class ArticleListAPIView(APIView):
         elif categorie == 'nickname' :
             search = request.GET.get("search")
             articles = articles.filter(author__contains=search)
-        
+
         #정렬
         order = request.GET.get("order")
-        if order == 'comment' :
-            comment_count = articles.annotate(comment_count=Count(F('comments')))
-            articles = comment_count.order_by('-comment_count')
-            print(articles.values())
-        elif order == 'like' :
+        if order == 'like' :
             articles = articles.annotate(like_count=Count(F('likes'))).order_by('-like_count')
         elif order == 'recent' :
             articles = articles.order_by('-created_at')
@@ -43,7 +38,7 @@ class ArticleListAPIView(APIView):
         page_number = request.GET.get("page")
         if page_number != None:
             articles = paginator.get_page(page_number)
-        serializer = ArticleSerializer(articles, many=True, context={'comment_count': articles.object_list})
+        serializer = ArticleSerializer(articles, many=True)
 
         return Response(serializer.data)
 
