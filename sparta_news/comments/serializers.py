@@ -18,8 +18,6 @@ class RelativeDateField(serializers.Field):
             return f"{days} days ago"
         else:
             return f"{minutes} minutes ago"
-        
-    
 
 
 class CoCommentViewSerializer(serializers.ModelSerializer):
@@ -29,7 +27,14 @@ class CoCommentViewSerializer(serializers.ModelSerializer):
             "id",
             "content",
         ]
-        read_only_fields = ['author']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # 작성자 정보를 가져와서 nickname을 data에 추가하는 부분
+        author_nickname = instance.author.nickname  # 예시: 작성자의 nickname 필드
+        data['author_nickname'] = author_nickname
+        return data
+
 
 class CoCommentWriteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,8 +51,8 @@ class CommentViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        exclude= (
-            'author', 
+        exclude = (
+            'author',
             'created_at',
             'article'
         )
