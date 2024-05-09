@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
-from django.db.models import Count, F
+from django.db.models import Count, F, Sum, ExpressionWrapper, IntegerField
 from .models import Article, ArticleLike
 from django.core import serializers
 from rest_framework.permissions import IsAuthenticated
@@ -30,7 +30,9 @@ class ArticleListAPIView(APIView):
         #정렬
         order = request.GET.get("order")
         if order == 'comment' :
-            articles = articles.annotate(comment_count=Count('comments')).order_by('-comment_count')
+            comment_count = articles.annotate(comment_count=Count(F('comments')))
+            articles = comment_count.order_by('-comment_count')
+            print(articles.values())
         elif order == 'like' :
             articles = articles.annotate(like_count=Count(F('likes'))).order_by('-like_count')
         elif order == 'recent' :
@@ -39,11 +41,10 @@ class ArticleListAPIView(APIView):
         #페이지네이션
         paginator = Paginator(articles, 30) 
         page_number = request.GET.get("page")
-        if page_number == None:
-            serializer = ArticleSerializer(articles, many=True)
-        else :
-            page_obj = paginator.get_page(page_number)
-            serializer = ArticleSerializer(page_obj, many=True)
+        if page_number != None:
+            articles = paginator.get_page(page_number)
+        serializer = ArticleSerializer(articles, many=True, context={'comment_count': articles.object_list})
+
         return Response(serializer.data)
 
     def post(self, request):

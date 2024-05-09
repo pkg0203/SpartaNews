@@ -3,6 +3,7 @@ from .models import Article, ArticleLike
 from markdownx.utils import markdown
 from datetime import datetime, timedelta, timezone
 from .ai_test import news_link_ai
+from comments.models import Comment
 
 class RelativeDateField(serializers.Field):
     def to_representation(self, times):
@@ -25,7 +26,8 @@ class RelativeDateField(serializers.Field):
         
 class ArticleSerializer(serializers.ModelSerializer):
     date = RelativeDateField(source='created_at')
-
+    comment_count = serializers.IntegerField(read_only=True)
+    
     class Meta:
         model = Article
         exclude= (
