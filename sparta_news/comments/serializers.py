@@ -20,7 +20,16 @@ class RelativeDateField(serializers.Field):
             return f"{minutes} minutes ago"
 
 
-class CoCommentSerializer(serializers.ModelSerializer):
+class CoCommentViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Co_Comment
+        fields = [
+            "id",
+            "content",
+        ]
+        read_only_fields = ['author']
+
+class CoCommentWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Co_Comment
         fields = [
@@ -30,7 +39,7 @@ class CoCommentSerializer(serializers.ModelSerializer):
 
 
 class CommentViewSerializer(serializers.ModelSerializer):
-    co_comments = CoCommentSerializer(many=True, read_only=True)
+    co_comments = CoCommentViewSerializer(many=True, read_only=True)
     date = RelativeDateField(source='created_at')
 
     class Meta:
