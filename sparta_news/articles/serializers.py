@@ -4,8 +4,27 @@ from markdownx.utils import markdown
 from datetime import datetime, timedelta, timezone
 from .ai_test import news_link_ai
 
+class RelativeDateField(serializers.Field):
+    def to_representation(self, times):
+        now = datetime.now().date()
+        times = times.date()
+        delta = now - times
+        years = delta.days // 365
+        days = delta.days
+        hours = delta.days * 24
+        minutes = delta.seconds // 60
+
+        if years > 0:
+            return f"{years} 년전"
+        elif days > 0:
+            return f"{days} 일전"
+        elif hours > 0:
+            return f"{hours} 시간전"
+        else:
+            return f"{minutes} 분전"
+        
 class ArticleSerializer(serializers.ModelSerializer):
-    created_string = serializers.SerializerMethodField()
+    date = RelativeDateField(source='created_at')
 
     class Meta:
         model = Article
@@ -28,21 +47,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         # data['content'] = markdown(data['content'])
         data['like_count'] = ArticleLike.objects.filter(article_id=instance.id).count()
         return data
-
-    def get_created_string(self, instance):
-        time_diff = datetime.now() - instance.created_at
-        if time_diff < timedelta(minutes=1):
-            return '방금 전'
-        elif time_diff < timedelta(hours=1):
-            return str(int(time_diff.seconds / 60)) + '분 전'
-        elif time_diff < timedelta(days=1):
-            return str(int(time_diff.seconds / 3600)) + '시간 전'
-        elif time_diff < timedelta(days=7):
-            days_diff = datetime.now().date() - instance.created_at.date()
-            return str(days_diff.days) + '일 전'
-        else:
-            days_diff = datetime.now().date() - instance.created_at.date()
-            return str(days_diff.days) + '일 전'
         
 class ArticleDetailSerializer(ArticleSerializer) :
     class Meta:

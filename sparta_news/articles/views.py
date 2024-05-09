@@ -32,7 +32,7 @@ class ArticleListAPIView(APIView):
         if order == 'comment' :
             articles = articles.annotate(comment_count=Count('comments')).order_by('-comment_count')
         elif order == 'like' :
-            pass
+            articles = articles.annotate(like_count=Count(F('likes'))).order_by('-like_count')
         elif order == 'recent' :
             articles = articles.order_by('-created_at')
 

@@ -11,14 +11,17 @@ class RelativeDateField(serializers.Field):
         delta = now - times
         years = delta.days // 365
         days = delta.days
+        hours = delta.days * 24
         minutes = delta.seconds // 60
 
         if years > 0:
-            return f"{years} years ago"
+            return f"{years} 년전"
         elif days > 0:
-            return f"{days} days ago"
+            return f"{days} 일전"
+        elif hours > 0:
+            return f"{hours} 시간전"
         else:
-            return f"{minutes} minutes ago"
+            return f"{minutes} 분전"
         
     
 
