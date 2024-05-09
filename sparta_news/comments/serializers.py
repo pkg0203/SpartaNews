@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import *
 from datetime import datetime, timedelta
-from django.utils.timezone import make_aware, is_aware
 
 
 class RelativeDateField(serializers.Field):
@@ -22,11 +21,27 @@ class RelativeDateField(serializers.Field):
             return f"{hours} 시간전"
         else:
             return f"{minutes} 분전"
-        
-    
 
 
-class CoCommentSerializer(serializers.ModelSerializer):
+class CoCommentViewSerializer(serializers.ModelSerializer):
+    date = RelativeDateField(source='created_at')
+    class Meta:
+        model = Co_Comment
+        fields = [
+            "id",
+            "content",
+            "date",
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # 작성자 정보를 가져와서 nickname을 data에 추가하는 부분
+        author_nickname = instance.author.nickname  # 예시: 작성자의 nickname 필드
+        data['author_nickname'] = author_nickname
+        return data
+
+
+class CoCommentWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Co_Comment
         fields = [
@@ -36,13 +51,13 @@ class CoCommentSerializer(serializers.ModelSerializer):
 
 
 class CommentViewSerializer(serializers.ModelSerializer):
-    co_comments = CoCommentSerializer(many=True, read_only=True)
+    co_comments = CoCommentViewSerializer(many=True, read_only=True)
     date = RelativeDateField(source='created_at')
 
     class Meta:
         model = Comment
-        exclude= (
-            'author', 
+        exclude = (
+            'author',
             'created_at',
             'article'
         )

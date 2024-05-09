@@ -33,7 +33,7 @@ class CommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, comment_id):
-        serializer = CoCommentSerializer(data=request.data)
+        serializer = CoCommentWriteSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user,
                             comment_at=get_object_or_404(Comment, pk=comment_id))
@@ -65,7 +65,7 @@ class CoCommentView(APIView):
     def put(self, request, co_comment_id):
         co_comment = get_object_or_404(Co_Comment, pk=co_comment_id)
         if request.user == co_comment.author:
-            serializer = CoCommentSerializer(
+            serializer = CoCommentWriteSerializer(
                 co_comment, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
