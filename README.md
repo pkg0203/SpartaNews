@@ -1,34 +1,42 @@
-# Sparta News Project
+# 🏫 Sparta News Project
 
-스파르타 뉴스 프로젝트는 스파르타 코딩클럽 프로젝트의 일환으로, Django REST Framework를 이용하여 백엔드만으로 뉴스사이트를 만드는 프로젝트입니다. 
+### 스파르타 뉴스 프로젝트는 스파르타 코딩클럽 프로젝트의 일환으로
 
-</br>
-</br>
-
-## 개발기간
-
-- 2024.05.03(금) ~ 2024.05.10(금)
+### Django REST Framework를 이용하여 백엔드만으로, 뉴스 사이트를 만드는 프로젝트입니다. 
 
 </br>
 </br>
 
-## 팀 멤버 구성
+## ⏱️ 개발기간
+
+- ### 2024.05.03(금) ~ 2024.05.10(금)
+
+</br>
+</br>
+
+## 🗺️ ERD
+
+![ERD](https://github.com/pkg0203/SpartaNews/assets/71966567/bbe8cb78-c91e-4ae4-b908-adbf242b1f67)
+</br>
+</br>
+
+## 🧑‍🤝‍🧑 팀 멤버 구성
 
 <br/>
 
-- 박강균 [@pkg0203] (https://github.com/pkg0203)
+- 🦔 **박강균** [@pkg0203] (https://github.com/pkg0203)
     * 팀장, Comment 구현
-- 황수민 [@sumina-codewell] (https://github.com/sumina-codewell)
+- **황수민** [@sumina-codewell] (https://github.com/sumina-codewell)
     * Account 구현
-- 신연우 [@yeonwooshin21] (https://github.com/yeonwooshin21)
+- **신연우** [@yeonwooshin21] (https://github.com/yeonwooshin21)
     * Article 구현
-- 이준서 [@LeeJS9856] (https://github.com/LeeJS9856)
+- 🐢 **이준서** [@LeeJS9856] (https://github.com/LeeJS9856)
     * AI 구현
 
 </br>
 </br>
 
-## 개발 환경
+## 🖥️ 개발 환경
 
 ### 언어
 
@@ -43,13 +51,19 @@
 ### 데이터베이스
 
 - django ORM
-
+- SQLite
 
 </br>
 </br>
 
-## 기능 상세
+## 🚊 API 명세
 
+![API](https://github.com/pkg0203/SpartaNews/assets/71966567/1e599087-c953-4b0f-b3d0-5e2d5ee043df)
+</br>
+</br>
+
+## 🎫 기능 상세
+### < Accounts >
 - **회원가입** : reCapcha를 통해 봇이 아닌 사용자만 회원가입할 수 있습니다.
 - **로그인** : 로그인을 통해 access토큰과 refresh토큰을 발급받을 수 있습니다.
 - **로그아웃** : 로그아웃시 refresh 토큰이 만료됩니다.
@@ -60,6 +74,7 @@
 </br>
 </br>
 
+### < Articles >
 - **기사 목록 조회** : 기사 목록을 조회합니다. 페이지당 30개씩 기사 조회가 가능합니다. 제목별, 닉네임별, 내용별 검색과 좋아요순, 최신순 정렬을 지원합니다.
 - **기사 상세 조회** : 기사의 상세내용을 조회합니다. 만약 뉴스 링크가 있다면 AI를 통해 해당 링크의 기사를 자동으로 번역하여 요약해주는 기능을 지원합니다.
 - **기사 생성** : 로그인한 유저는 기사를 생성할 수 있습니다. 참고한 뉴스의 url을 필수로 입력해야합니다. 마크다운 언어를 사용하여 작성가능합니다.
@@ -69,6 +84,7 @@
 </br>
 </br>
 
+### < Comments & Co-Comments>
 - **댓글 조회** : 해당 기사에 달린 댓글과 대댓글을 모두 조회합니다.
 - **댓글 생성** : 로그인한 유저는 해당 기사에 댓글을 생성할 수 있습니다.
 - **댓글 수정** : 댓글을 작성한 유저는 해당 댓글을 수정할 수 있습니다.
@@ -80,18 +96,7 @@
 
 
 
-</br>
-</br>
-
-## API 명세
-
-![API](https://github.com/pkg0203/SpartaNews/assets/71966567/1e599087-c953-4b0f-b3d0-5e2d5ee043df)
 
 
-</br>
-</br>
 
-## ERD
-
-![ERD](https://github.com/pkg0203/SpartaNews/assets/71966567/bbe8cb78-c91e-4ae4-b908-adbf242b1f67)
 
