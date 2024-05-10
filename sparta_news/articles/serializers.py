@@ -6,7 +6,7 @@ from .ai_test import news_link_ai
 from comments.models import Comment
 
 class RelativeDateField(serializers.Field):
-    def to_representation(self, times):
+    def to_representation(self, times):       
         now = datetime.now().date()
         times = times.date()
         delta = now - times
@@ -36,7 +36,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
             'content': {'write_only': True},
-            'url': {'write_only': True}
+            'url': {'write_only': True},
         }
         
 
@@ -48,6 +48,16 @@ class ArticleSerializer(serializers.ModelSerializer):
         # data['content'] = markdown(data['content'])
         data['like_count'] = ArticleLike.objects.filter(article_id=instance.id).count()
         return data
+
+class ArticleWriteSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = Article
+        fields = [
+            "title",
+            "content",
+            "url"
+        ]
+        read_only_fields = ['author']
         
 class ArticleDetailSerializer(ArticleSerializer) :
     class Meta:
@@ -63,3 +73,4 @@ class ArticleDetailSerializer(ArticleSerializer) :
         news_link = news_link_ai(instance.url)
         data['news_link'] = news_link
         return data
+    

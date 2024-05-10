@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import ArticleSerializer, ArticleDetailSerializer
+from .serializers import ArticleSerializer, ArticleDetailSerializer, ArticleWriteSerializer
 
 class ArticleListAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -45,7 +45,7 @@ class ArticleListAPIView(APIView):
     def post(self, request):
         if not request.user.is_authenticated:
             return Response({"error": "인증되지 않은 사용자입니다."}, status=status.HTTP_401_UNAUTHORIZED)
-        serializer = ArticleSerializer(data=request.data)
+        serializer = ArticleWriteSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(author=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
