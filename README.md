@@ -25,7 +25,7 @@
     * #### 팀장, Comment 구현
 - ###  ![image](https://github.com/pkg0203/SpartaNews/assets/141356379/99274cba-e3b6-4d5c-8892-b01d8ac3f714) 황수민 [@sumina-codewell] (https://github.com/sumina-codewell)
     * #### Account 구현
-- ### 신연우 [@yeonwooshin21] (https://github.com/yeonwooshin21)
+- ### ![image](https://github.com/pkg0203/SpartaNews/assets/141356379/855e3eca-de30-4a79-9f97-f2fee6051ff6) 신연우 [@yeonwooshin21] (https://github.com/yeonwooshin21)
     * #### Article 구현
 - ### 🐢 이준서 [@LeeJS9856] (https://github.com/LeeJS9856)
     * #### AI 구현
