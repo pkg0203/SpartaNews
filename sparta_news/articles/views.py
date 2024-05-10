@@ -71,18 +71,25 @@ class ArticleDetailAPIView(APIView):
         if not request.user.is_authenticated:
             return Response({"error": "인증되지 않은 사용자입니다."}, status=status.HTTP_401_UNAUTHORIZED)
         article = self.get_object(pk)
-        serializer = ArticleSerializer(article, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+
+        if request.user == article.author:
+            serializer = ArticleSerializer(article, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
             return Response(serializer.data)
+        else :
+            return Response({"본인 기사만 수정할 수 있습니다."})
 
     def delete(self, request, pk):
         if not request.user.is_authenticated:
             return Response({"error": "인증되지 않은 사용자입니다."}, status=status.HTTP_401_UNAUTHORIZED)
         article = self.get_object(pk)
-        article.delete()
-        data = {"pk": f"{pk} is deleted."}
-        return Response(data, status=status.HTTP_200_OK)
+        if request.user == article.author:
+            article.delete()
+            data = {"pk": f"{pk} is deleted."}
+            return Response(data, status=status.HTTP_200_OK)
+        else :
+            return Response({"본인 기사만 수정할 수 있습니다."})
 
     
 class ArticleLikeAPIView(APIView):

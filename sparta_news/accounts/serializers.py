@@ -40,18 +40,5 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['password', 'nickname']
+        fields = ['nickname']
         read_only_fields = ['username']
-
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
-
-    def update(self, instance, validated_data):
-        if self.context['request'].user.id != instance.id:
-            raise serializers.ValidationError()
-
-        instance.password = validated_data.get('password', instance.password)
-        instance.nickname = validated_data.get('nickname', instance.nickname)
-        instance.save()
-        return instance

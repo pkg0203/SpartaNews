@@ -10,21 +10,22 @@ class RelativeDateField(serializers.Field):
         delta = now - times
         years = delta.days // 365
         days = delta.days
-        hours = delta.days * 24
-        minutes = delta.seconds // 60
+        hours = delta.seconds // 3600
+        minutes = (delta.seconds % 3600) // 60
 
         if years > 0:
-            return f"{years} 년전"
+            return f"{years} 년 전"
         elif days > 0:
-            return f"{days} 일전"
+            return f"{days} 일 전"
         elif hours > 0:
-            return f"{hours} 시간전"
+            return f"{hours} 시간 전"
         else:
-            return f"{minutes} 분전"
+            return f"{minutes} 분 전"
 
 
 class CoCommentViewSerializer(serializers.ModelSerializer):
     date = RelativeDateField(source='created_at')
+
     class Meta:
         model = Co_Comment
         fields = [
